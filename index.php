@@ -6,10 +6,10 @@
     ini_set('display_errors', 1);
 
     //variables
-    $directory = '../';                                         // Replace with the actual directory path
-    $urlGiteaServer = 'http://192.168.1.227:3000/chrisgreen/';               // Replace with your Git server URL
-    $urlGithub = 'https://github.com/chriscookiegreen/';        // Replace with your Git server URL
-    $urlPHPMyadmin = 'http://192.168.1.151/phpmyadmin';   // Replace with your Git server URL
+    $directory = './';                                         // Replace with the actual directory path
+    $urlGiteaServer = '#';               // Replace with your Git server URL
+    $urlGithub = '#';        // Replace with your Git server URL
+    $urlPHPMyadmin = '#';   // Replace with your Git server URL
 
     //
     // Function to create SVG icons for various technologies to be used in badges
