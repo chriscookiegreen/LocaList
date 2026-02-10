@@ -775,8 +775,9 @@ function getGitInfo(string $path): array
                                     <button @click="actionsOpen = !actionsOpen; gitOpen = false; descOpen = false" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold hover:bg-teal-500 dark:hover:bg-teal-500 hover:text-white rounded-md transition duration-150 ease-in-out" x-text="actionsOpen ? 'Close Project Actions' : 'Project Actions'" ></button>
                                 </div>
 
-                                <div class="flex flex-wrap">
-                                    <span class="text-xs pr-4 my-auto">Built Using: </span><?= renderBadges(detectTechStack($path)) ?>
+                                <div class="flex flex-wrap items-center">
+                                    <span class="text-xs pr-4">Built Using:</span>
+                                    <?= renderBadges(detectTechStack($path)) ?>
                                 </div>
                             </div>
                         </div>
