@@ -16,39 +16,39 @@ function renderGitOverlay(array $project): string {
         <template x-if="gitOpen">
             <div>
                 <div class="px-4 py-3 border-b border-gray-100">
-                    <h3 class="text-sm font-semibold text-gray-700"><?= htmlspecialchars($title) ?>Repository Details</h3>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-white"><?= htmlspecialchars($title) ?>Repository Details</h3>
                 </div>
 
                 <div class="px-4 py-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
                     <div>
-                        <div class="font-medium text-gray-900">Current Branch</div>
-                        <div class="mt-1 text-gray-600"> ' . htmlspecialchars($git['branch']) . '</div>
+                        <div class="font-medium text-gray-900 dark:text-white">Current Branch</div>
+                        <div class="mt-1 text-gray-600 dark:text-gray-400"> ' . htmlspecialchars($git['branch']) . '</div>
                     </div>
 
                     <div>
-                        <div class="font-medium text-gray-900">Total Commits</div>
-                        <div class="mt-1 text-gray-600">' . htmlspecialchars($git['totalCommits']) . '</div>
+                        <div class="font-medium text-gray-900 dark:text-white">Total Commits</div>
+                        <div class="mt-1 text-gray-600 dark:text-gray-400">' . htmlspecialchars($git['totalCommits']) . '</div>
                     </div>
 
                     <div class="md:col-span-2">
-                        <div class="font-medium text-gray-900">Last Commit</div>
-                        <div class="mt-1 text-gray-600 space-y-1">
-                            <div><span class="font-semibold">Author:</span> ' . htmlspecialchars($git['lastAuth']) . '</div>
-                            <div><span class="font-semibold">Date:</span> ' . htmlspecialchars($git['lastDate']) . '</div>
-                            <div><span class="font-semibold">Message:</span> ' . htmlspecialchars($git['lastMsg']) . '</div>
+                        <div class="font-medium text-gray-900 dark:text-white">Last Commit</div>
+                        <div class="mt-1 text-gray-600 dark:text-white space-y-1">
+                            <div><span class="font-semibold dark:text-gray-400">Author:</span> ' . htmlspecialchars($git['lastAuth']) . '</div>
+                            <div><span class="font-semibold dark:text-gray-400">Date:</span> ' . htmlspecialchars($git['lastDate']) . '</div>
+                            <div><span class="font-semibold dark:text-gray-400">Message:</span> ' . htmlspecialchars($git['lastMsg']) . '</div>
                         </div>
                     </div>
 
                     <div>
-                        <div class="font-medium text-gray-900">Sync Status</div>
+                        <div class="font-medium text-gray-900 dark:text-white">Sync Status</div>
                         <div class="mt-1 text-gray-600 flex items-center gap-2">
                             ' . $aheadBadge . $behindBadge . '
                         </div>
                     </div>
 
                     <div>
-                        <div class="font-medium text-gray-900">Created</div>
-                        <div class="mt-1 text-gray-600">' . htmlspecialchars($git['createdDate']) . '</div>
+                        <div class="font-medium text-gray-900 dark:text-white">Created</div>
+                        <div class="mt-1 text-gray-600 dark:text-gray-400">' . htmlspecialchars($git['createdDate']) . '</div>
                     </div>
                 </div>
             </div>
