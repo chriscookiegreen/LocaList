@@ -1,419 +1,34 @@
 <?php
+    // ------------------------------------------------------------
     // Report *all* PHP errors, warnings, and notices to help with debugging
+    // ------------------------------------------------------------
     error_reporting(E_ALL);
-
-    // Display errors directly in the browser (useful in development, avoid in production)
     ini_set('display_errors', 1);
 
-    //variables
-    $directory = './';                                         // Replace with the actual directory path
-    $urlGiteaServer = '#';               // Replace with your Git server URL
-    $urlGithub = '#';        // Replace with your Git server URL
-    $urlPHPMyadmin = '#';   // Replace with your Git server URL
+    // ------------------------------------------------------------
+    // Load core functions
+    // ------------------------------------------------------------
+    require_once __DIR__ . '/includes/data/readme.php';
+    require_once __DIR__ . '/includes/data/preview.php';
+    require_once __DIR__ . '/includes/data/tech.php';
+    require_once __DIR__ . '/includes/data/project-info.php';
 
-    //
-    // Function to create SVG icons for various technologies to be used in badges
-    // Each icon is stored as a string in an associative array, keyed by the technology name
-    //
-    function techIcons(): array {
-        return [
-            // Core Web
-            'HTML' => '
-                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" version="1.1" width="16px" height="16px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-                    <g id="c133de6af664cd4f011a55de6b0011b2">
-                        <path display="inline" d="M30.713,0.501L71.717,460.42l184.006,51.078l184.515-51.15L481.287,0.501H30.713z M395.754,109.646   l-2.567,28.596l-1.128,12.681h-0.187H256h-0.197h-79.599l5.155,57.761h74.444H256h115.723h15.201l-1.377,15.146l-13.255,148.506   l-0.849,9.523L256,413.854v0.012l-0.259,0.072l-115.547-32.078l-7.903-88.566h26.098h30.526l4.016,44.986l62.82,16.965l0.052-0.014   v-0.006l62.916-16.977l6.542-73.158H256h-0.197H129.771l-13.863-155.444l-1.351-15.131h141.247H256h141.104L395.754,109.646z"></path>
-                    </g>
-                </svg>
-            ',
-            'CSS' => '
-                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" version="1.1" width="16px" height="16px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-                    <g id="c133de6af664cd4f011a55de6b001b19">
-                        <path display="inline" d="M483.111,0.501l-42.59,461.314l-184.524,49.684L71.47,461.815L28.889,0.501H483.111z M397.29,94.302   H255.831H111.866l6.885,55.708h137.08h7.7l-7.7,3.205l-132.07,55.006l4.38,54.453l127.69,0.414l68.438,0.217l-4.381,72.606   l-64.058,18.035v-0.057l-0.525,0.146l-61.864-15.617l-3.754-45.07h-0.205H132.1h-0.202l7.511,87.007l116.423,34.429v-0.062   l0.21,0.062l115.799-33.802l15.021-172.761h-131.03h-0.323l0.323-0.14l135.83-58.071L397.29,94.302z"></path>
-                    </g>
-                </svg>
-            ',
-            'JavaScript' => '
-                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" version="1.1" width="16px" height="16px" viewBox="0 0 20 20" version="1.1">
-                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="Dribbble-Light-Preview" transform="translate(-420.000000, -7479.000000)" fill="currentColor>
-                            <g id="icons" transform="translate(56.000000, 160.000000)">
-                                <path d="M379.328,7337.432 C377.583,7337.432 376.455,7336.6 375.905,7335.512 L375.905,7335.512 L377.435,7334.626 C377.838,7335.284 378.361,7335.767 379.288,7335.767 C380.066,7335.767 380.563,7335.378 380.563,7334.841 C380.563,7334.033 379.485,7333.717 378.724,7333.391 C377.368,7332.814 376.468,7332.089 376.468,7330.558 C376.468,7329.149 377.542,7328.075 379.221,7328.075 C380.415,7328.075 381.275,7328.491 381.892,7329.578 L380.429,7330.518 C380.107,7329.941 379.758,7329.713 379.221,7329.713 C378.67,7329.713 378.321,7330.062 378.321,7330.518 C378.321,7331.082 378.67,7331.31 379.476,7331.659 C381.165,7332.383 382.443,7332.952 382.443,7334.814 C382.443,7336.506 381.114,7337.432 379.328,7337.432 L379.328,7337.432 Z M375,7334.599 C375,7336.546 373.801,7337.575 372.136,7337.575 C370.632,7337.575 369.731,7337 369.288,7336 L369.273,7336 L369.266,7336 L369.262,7336 L370.791,7334.931 C371.086,7335.454 371.352,7335.825 371.996,7335.825 C372.614,7335.825 373,7335.512 373,7334.573 L373,7328 L375,7328 L375,7334.599 Z M364,7339 L384,7339 L384,7319 L364,7319 L364,7339 Z" id="javascript-[#155]"></path>
-                            </g>
-                        </g>
-                    </g>
-                </svg>
-            ',
-            'GIT' => '
-                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" version="1.1" width="16px" height="16px" viewBox="0 0 16 16">
-                    <g>
-                        <path d="M15,5.6,10.4,1A3.4,3.4,0,0,0,5.78.86L7.66,2.74a1.25,1.25,0,0,1,1.67,1.2V4a1.23,1.23,0,0,1-.08.38l2.45,2.4a1.17,1.17,0,0,1,.37-.08A1.3,1.3,0,1,1,10.77,8h0a1.17,1.17,0,0,1,.08-.37L8.6,5.38v5.23a1.28,1.28,0,0,1,.73,1.15,1.3,1.3,0,0,1-2.6,0,1.27,1.27,0,0,1,.67-1.11V5.07A1.27,1.27,0,0,1,6.73,4a1.17,1.17,0,0,1,.08-.37l-1.9-1.9L1,5.6a3.38,3.38,0,0,0,0,4.79H1L5.6,15a3.38,3.38,0,0,0,4.79,0h0L15,10.4a3.38,3.38,0,0,0,0-4.79Z"/>
-                    </g>
-                </svg>
-            ',
-            // PHP
-            'PHP' => '
-                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" version="1.1" width="16px" height="16px"viewBox="0 0 24 24">
-                    <path d="M12 5.5C5.27148 5.5 0 8.35547 0 12C0 15.6445 5.27148 18.5 12 18.5C18.7285 18.5 24 15.6445 24 12C24 8.35547 18.7285 5.5 12 5.5ZM10.7539 7.5H12.0645L11.6484 9.5H12.8184C13.5605 9.5 14.0586 9.60352 14.3418 9.86328C14.6191 10.1191 14.7031 10.5391 14.5918 11.1113L14.0723 13.5H12.7402L13.2188 11.291C13.2773 10.9883 13.2539 10.7773 13.1523 10.666C13.0508 10.5547 12.8281 10.5 12.4941 10.5H11.4453L10.8125 13.5H9.5L10.7539 7.5ZM5 9.5H7.66602C8.9375 9.5 9.70703 10.3516 9.40625 11.623C9.05664 13.0996 8.11914 13.5 6.39648 13.5H5.57227L5.31055 15H3.98633L5 9.5ZM15.5 9.5H18.166C19.4375 9.5 20.207 10.3516 19.9062 11.623C19.5566 13.0996 18.6191 13.5 16.8965 13.5H16.0723L15.8105 15H14.4863L15.5 9.5ZM6.13477 10.5L5.75781 12.5H6.61328C7.35352 12.5 8.04102 12.416 8.15625 11.3125C8.19922 10.8848 8.02148 10.5 7.16602 10.5H6.13477ZM16.6348 10.5L16.2578 12.5H17.1133C17.8535 12.5 18.541 12.416 18.6562 11.3125C18.6992 10.8848 18.5215 10.5 17.666 10.5H16.6348Z" fill="currentColor"/>
-                </svg>
-            ',
-            // Node
-            'Node' => '
-                <svg viewBox="0 0 256 272" class="w-4 h-4">
-                    <path fill="#83CD29" d="M128 0l128 74v124l-128 74L0 198V74z"/>
-                </svg>
-            ',
-            // React
-            'React' => '
-                <svg viewBox="0 0 128 128" class="w-4 h-4">
-                    <circle cx="64" cy="64" r="11" fill="#ffffff"/>
-                    <g stroke="#ffffff" stroke-width="6" fill="none">
-                        <ellipse rx="56" ry="22" cx="64" cy="64" transform="rotate(0 64 64)"/>
-                        <ellipse rx="56" ry="22" cx="64" cy="64" transform="rotate(60 64 64)"/>
-                        <ellipse rx="56" ry="22" cx="64" cy="64" transform="rotate(120 64 64)"/>
-                    </g>
-                </svg>
-            ',
-            // Vue
-            'Vue' => '
-                <svg viewBox="0 0 261.76 226.69" class="w-4 h-4">
-                    <path fill="#41B883" d="M130.88 0L0 0l130.88 226.69L261.76 0z"/>
-                    <path fill="#35495E" d="M130.88 0L65.44 0l65.44 113.35L196.32 0z"/>
-                </svg>
-            ',
-            // Tailwind
-            'Tailwind' => '
-                <svg viewBox="0 0 128 128" class="w-4 h-4">
-                    <path fill="#38BDF8" d="M64 24c-16 0-26 8-30 24 6-8 14-12 24-12 12 0 20 6 24 18 4 12 12 18 24 18 16 0 26-8 30-24-6 8-14 12-24 12-12 0-20-6-24-18-4-12-12-18-24-18z"/>
-                </svg>
-            ',
-            // WordPress
-            'WordPress' => '
-                <svg viewBox="0 0 128 128" class="w-4 h-4">
-                    <circle cx="64" cy="64" r="60" fill="#ffffff"/>
-                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-size="50" font-family="Georgia" dy=".3em">W</text>
-                </svg>
-            ',
-            // Docker
-            'Docker' => '
-                <svg viewBox="0 0 256 256" class="w-4 h-4">
-                    <rect x="20" y="120" width="40" height="40" fill="#ffffff"/>
-                    <rect x="70" y="120" width="40" height="40" fill="#ffffff"/>
-                    <rect x="120" y="120" width="40" height="40" fill="#ffffff"/>
-                    <rect x="170" y="120" width="40" height="40" fill="#ffffff"/>
-                    <rect x="70" y="70" width="40" height="40" fill="#ffffff"/>
-                    <rect x="120" y="70" width="40" height="40" fill="#ffffff"/>
-                    <rect x="170" y="70" width="40" height="40" fill="#ffffff"/>
-                </svg>
-            ',
-        ];
-    }
+    require_once __DIR__ . '/includes/render/title.php';
+    require_once __DIR__ . '/includes/render/preview.php';
+    require_once __DIR__ . '/includes/render/description.php';
+    require_once __DIR__ . '/includes/render/description-overlay.php';
+    require_once __DIR__ . '/includes/render/actions-overlay.php';
+    require_once __DIR__ . '/includes/render/tech-badges.php';
+    require_once __DIR__ . '/includes/render/card.php';
+    require_once __DIR__ . '/includes/render/all-cards.php';
 
-    //
-    // Function to render badges with appropriate colours and icons which includes dark mode support
-    // It takes an array of badge names (e.g., ['PHP', 'Docker']) and returns an HTML string with styled <span> elements for each badge
-    //
-    function renderBadges(array $badges): string {
-        $icons = techIcons();
-
-        $colors = [
-            'HTML'      => 'bg-orange-500 text-white dark:bg-orange-600 dark:text-white',
-            'CSS'       => 'bg-blue-500 text-white dark:bg-blue-600 dark:text-white',
-            'JavaScript'=> 'bg-yellow-400 text-black dark:bg-yellow-500 dark:text-black',
-            'GIT'       => 'bg-gray-700 text-white dark:bg-black',
-
-            'PHP'       => 'bg-indigo-600 text-white dark:bg-indigo-700',
-            'Composer'  => 'bg-purple-600 text-white dark:bg-purple-700',
-            'Laravel'   => 'bg-red-600 text-white dark:bg-red-700',
-            'Symfony'   => 'bg-gray-800 text-white dark:bg-gray-900',
-
-            'WordPress' => 'bg-blue-600 text-white dark:bg-blue-700',
-            'WooCommerce'=> 'bg-purple-700 text-white dark:bg-purple-800',
-
-            'Node'      => 'bg-green-600 text-white dark:bg-green-700',
-            'React'     => 'bg-sky-500 text-white dark:bg-sky-600',
-            'Vue'       => 'bg-emerald-500 text-white dark:bg-emerald-600',
-            'Svelte'    => 'bg-orange-500 text-white dark:bg-orange-600',
-            'Angular'   => 'bg-red-700 text-white dark:bg-red-800',
-            'Next.js'   => 'bg-black text-white dark:bg-gray-900',
-            'Nuxt'      => 'bg-green-700 text-white dark:bg-green-800',
-
-            'Vite'      => 'bg-violet-500 text-white dark:bg-violet-600',
-            'Webpack'   => 'bg-blue-500 text-white dark:bg-blue-600',
-            'Gulp'      => 'bg-red-500 text-white dark:bg-red-600',
-
-            'Tailwind'  => 'bg-cyan-500 text-white dark:bg-cyan-600',
-            'Bootstrap' => 'bg-purple-700 text-white dark:bg-purple-800',
-
-            'Astro'     => 'bg-indigo-800 text-white dark:bg-indigo-900',
-            'Hugo'      => 'bg-blue-700 text-white dark:bg-blue-800',
-            'Jekyll'    => 'bg-red-600 text-white dark:bg-red-700',
-
-            'Docker'    => 'bg-blue-400 text-white dark:bg-blue-500',
-            'Database'  => 'bg-yellow-600 text-white dark:bg-yellow-700',
-        ];
-
-        // Start building the HTML string with a flex container
-        $html = '<div class="flex flex-wrap gap-2 mt-2">';
-
-        // Loop through each badge in the list
-        foreach ($badges as $badge) {
-
-            // Get the SVG icon for this badge, or an empty string if none exists
-            $icon = $icons[$badge] ?? '';
-
-            // Get the colour classes for this badge, or fall back to a default style
-            $class = $colors[$badge] ?? 'bg-gray-300 text-black dark:bg-gray-700 dark:text-white';
-
-            // Append a styled <span> element containing the icon and badge label
-            $html .= "
-                <span class='flex items-center gap-1 px-2 py-1 text-xs rounded $class'>
-                    $icon
-                    <span>$badge</span>
-                </span>
-            ";
-        }
-
-        // Close the outer container div
-        $html .= '</div>';
-
-        // Return the complete HTML string
-        return $html;
-
-    }
-
-    //
-    // Function to detect technologies used in the project by checking for specific files and dependencies
-    // It takes a file path as input and returns an array of detected technologies (e.g., ['PHP', 'Docker'])
-    //
-    function detectTechStack(string $path): array {
-        $badges = [];
-
-        // -------------------------
-        // CORE WEB
-        // -------------------------
-        if (glob("$path/*.html") || file_exists("$path/index.html") || file_exists("$path/index.htm")) {
-            $badges[] = 'HTML';
-        }
-
-        if (glob("$path/*.css")) {
-            $badges[] = 'CSS';
-        }
-
-        if (glob("$path/*.js")) {
-            $badges[] = 'JavaScript';
-        }
-
-        if (is_dir("$path/.git") || file_exists("$path/HEAD")) {
-            $badges[] = 'GIT';
-            $GIT = true;
-        } else {
-            $GIT = false;
-        }
-
-        // -------------------------
-        // PHP + WORDPRESS
-        // -------------------------
-        if (glob("$path/*.php")) {
-            $badges[] = 'PHP';
-        }
-
-        if (file_exists("$path/composer.json")) {
-            $badges[] = 'Composer';
-
-            $composer = json_decode(file_get_contents("$path/composer.json"), true);
-            $require = array_keys($composer['require'] ?? []);
-
-            if (in_array('laravel/framework', $require)) $badges[] = 'Laravel';
-            if (in_array('symfony/symfony', $require)) $badges[] = 'Symfony';
-        }
-
-        if (file_exists("$path/wp-config.php")) {
-            $badges[] = 'WordPress';
-
-            if (is_dir("$path/wp-content/plugins/woocommerce")) {
-                $badges[] = 'WooCommerce';
-            }
-        }
-
-        // -------------------------
-        // NODE + FRONTEND FRAMEWORKS
-        // -------------------------
-        if (file_exists("$path/package.json")) {
-            $badges[] = 'Node';
-
-            $package = json_decode(file_get_contents("$path/package.json"), true);
-            $deps = array_merge(
-                array_keys($package['dependencies'] ?? []),
-                array_keys($package['devDependencies'] ?? [])
-            );
-
-            // Frameworks
-            if (in_array('react', $deps)) $badges[] = 'React';
-            if (in_array('vue', $deps)) $badges[] = 'Vue';
-            if (in_array('svelte', $deps)) $badges[] = 'Svelte';
-            if (in_array('@angular/core', $deps)) $badges[] = 'Angular';
-
-            // Meta-frameworks
-            if (in_array('next', $deps)) $badges[] = 'Next.js';
-            if (in_array('nuxt', $deps)) $badges[] = 'Nuxt';
-
-            // Build tools
-            if (in_array('vite', $deps)) $badges[] = 'Vite';
-            if (in_array('webpack', $deps)) $badges[] = 'Webpack';
-            if (in_array('gulp', $deps)) $badges[] = 'Gulp';
-
-            // CSS frameworks
-            if (in_array('tailwindcss', $deps)) $badges[] = 'Tailwind';
-            if (in_array('bootstrap', $deps)) $badges[] = 'Bootstrap';
-
-            // Backend
-            if (in_array('express', $deps)) $badges[] = 'Express';
-        }
-
-        // -------------------------
-        // STATIC SITE GENERATORS
-        // -------------------------
-        if (file_exists("$path/astro.config.mjs")) $badges[] = 'Astro';
-        if (file_exists("$path/config.toml") && file_exists("$path/content")) $badges[] = 'Hugo';
-        if (file_exists("$path/_config.yml")) $badges[] = 'Jekyll';
-
-        // -------------------------
-        // DOCKER
-        // -------------------------
-        if (file_exists("$path/Dockerfile") || file_exists("$path/docker-compose.yml")) {
-            $badges[] = 'Docker';
-        }
-
-        // -------------------------
-        // DATABASE HINT
-        // -------------------------
-        if (file_exists("$path/.env")) {
-            $env = file_get_contents("$path/.env");
-            if (strpos($env, 'DB_') !== false) {
-                $badges[] = 'Database';
-            }
-        }
-
-        // Return the list of badges found
-        return array_unique($badges);
-    }
-
-    //
-    // Function to get Git repository information such as creation date and first commit hash
-function getGitInfo(string $path): array
-{
-    static $cache = [];
-    if (isset($cache[$path])) {
-        return $cache[$path];
-    }
-
-    if (!is_dir($path . '/.git')) {
-        return $cache[$path] = [
-            'isRepo' => false,
-            'creationDate' => null,
-            'formattedDate' => null,
-            'hash' => null,
-            'branch' => null,
-            'lastCommit' => null,
-            'ahead' => null,
-            'behind' => null,
-            'commitCount' => null,
-        ];
-    }
-
-    // Helper to run Git commands
-    $run = function (string $cmd) use ($path): array {
-        $full = 'git -C ' . escapeshellarg($path) . ' ' . $cmd . ' 2>&1';
-        $output = shell_exec($full);
-        return [
-            'output' => trim((string) $output),
-            'success' => $output !== null && $output !== '',
-        ];
-    };
-
-    // Validate repo
-    $check = $run('rev-parse --is-inside-work-tree');
-    if (!$check['success'] || $check['output'] !== 'true') {
-        return $cache[$path] = [
-            'isRepo' => false,
-            'creationDate' => null,
-            'formattedDate' => null,
-            'hash' => null,
-            'branch' => null,
-            'lastCommit' => null,
-            'ahead' => null,
-            'behind' => null,
-            'commitCount' => null,
-        ];
-    }
-
-    // First commit (repo creation)
-    $roots = $run('rev-list --max-parents=0 HEAD');
-    $rootCommits = array_filter(explode("\n", $roots['output']));
-    $firstCommit = $rootCommits[0] ?? null;
-
-    $creationDate = null;
-    $formattedDate = null;
-
-    if ($firstCommit) {
-        $date = $run('show -s --format=%ci ' . escapeshellarg($firstCommit));
-        if ($date['success']) {
-            $creationDate = $date['output'];
-            try {
-                $dt = new DateTimeImmutable($creationDate);
-                $formattedDate = $dt->format('j F Y, H:i');
-            } catch (Exception $e) {
-                $formattedDate = null;
-            }
-        }
-    }
-
-    // 1. Current branch
-    $branch = $run('rev-parse --abbrev-ref HEAD');
-    $branchName = $branch['success'] ? $branch['output'] : null;
-
-    // 4. Last commit info
-    $lastCommitHash = $run('rev-parse HEAD')['output'] ?? null;
-    $lastCommitMessage = $run('show -s --format=%s')['output'] ?? null;
-    $lastCommitAuthor = $run('show -s --format=%an')['output'] ?? null;
-    $lastCommitDate = $run('show -s --format=%ci')['output'] ?? null;
-
-    $lastCommit = [
-        'hash' => $lastCommitHash,
-        'message' => $lastCommitMessage,
-        'author' => $lastCommitAuthor,
-        'date' => $lastCommitDate,
-    ];
-
-    // 6. Ahead / behind remote
-    $ahead = null;
-    $behind = null;
-
-    // Only attempt if remote exists
-    $remoteHead = $run('rev-parse --abbrev-ref --symbolic-full-name @{u}');
-    if ($remoteHead['success']) {
-        $counts = $run('rev-list --left-right --count ' . escapeshellarg($remoteHead['output']) . '...HEAD');
-        if ($counts['success']) {
-            [$behind, $ahead] = array_map('intval', explode("\t", $counts['output']));
-        }
-    }
-
-    // 8. Total commit count
-    $commitCount = $run('rev-list --count HEAD');
-    $commitCountValue = $commitCount['success'] ? (int) $commitCount['output'] : null;
-
-    return $cache[$path] = [
-        'isRepo' => true,
-        'creationDate' => $creationDate,
-        'formattedDate' => $formattedDate,
-        'hash' => $firstCommit,
-        'branch' => $branchName,
-        'lastCommit' => $lastCommit,
-        'ahead' => $ahead,
-        'behind' => $behind,
-        'commitCount' => $commitCountValue,
-    ];
-}
+    // ------------------------------------------------------------
+    // Configuration
+    // ------------------------------------------------------------
+    $directory      = '../';
+    $urlGiteaServer = '#';
+    $urlGithub      = '#';
+    $urlPHPMyadmin  = '#';
 
 ?>
 
@@ -435,7 +50,7 @@ function getGitInfo(string $path): array
     <body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="flex h">
             <!-- Sidebar -->
-            <aside class="w-64 bg-white dark:bg-gray-800 border-r dark:border-gray-700 py-6 px-4 space-y-4">
+            <aside class="w-64 fixed top-0 left-0 overflow-y-auto bg-white dark:bg-gray-800 border-r dark:border-gray-700 py-6 px-4 space-y-4">
                 <nav class="space-y-2">
                     <!-- Dark Mode Button -->
                     <button id="darkToggle" class="group w-full flex items-center justify-center space-x-2 text-sm font-medium text-gray-700 dark:text-white py-2 px-2 bg-gray-100 dark:bg-gray-900 hover:bg-teal-500 dark:hover:bg-teal-500  hover:text-white rounded-md transition duration-150 ease-in-out border border-gray-300 dark:border-gray-600 rounded-md">
@@ -455,27 +70,26 @@ function getGitInfo(string $path): array
                     </button>
          
                     <div class="h-full w-screen flex flex-row">
-                        
                         <div id="sidebar" class=" h-screen md:block w-30 md:w-56 overflow-x-hidden transition-transform duration-300 ease-in-out" x-show="sidenav" @click.away="sidenav = false">
                             <div class="space-y-6 md:space-y-6 mt-6">
                                 <!-- Logo -->
-                                <svg class="text-white" xmlns="http://www.w3.org/2000/svg" height="72px" width="72px" viewBox="0 0 32 32" fill="currentColor">
-                                        <!-- Top right bar -->
-                                        <rect x="18" y="2" width="6" height="14" rx="3" ry="3" class="text-black dark:text-white"/>
-                                        <rect x="25" y="10" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
+                                <svg class="text-white mx-auto" xmlns="http://www.w3.org/2000/svg" height="72px" width="72px" viewBox="0 0 32 32" fill="currentColor">
+                                    <!-- Top right bar -->
+                                    <rect x="18" y="2" width="6" height="14" rx="3" ry="3" class="text-black dark:text-white"/>
+                                    <rect x="25" y="10" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
 
-                                        <!-- Bottom right bar -->
-                                        <rect x="18" y="18" width="14" height="6" rx="3" ry="3" class="text-black dark:text-white"/>
-                                        <rect x="18" y="25" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
+                                    <!-- Bottom right bar -->
+                                    <rect x="18" y="18" width="14" height="6" rx="3" ry="3" class="text-black dark:text-white"/>
+                                    <rect x="18" y="25" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
 
-                                        <!-- Bottom left bar -->
-                                        <rect x="10" y="18" width="6" height="14" rx="3" ry="3" class="text-black dark:text-white"/>
-                                        <rect x="3" y="18" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
+                                    <!-- Bottom left bar -->
+                                    <rect x="10" y="18" width="6" height="14" rx="3" ry="3" class="text-black dark:text-white"/>
+                                    <rect x="3" y="18" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
 
-                                        <!-- Top left bar -->
-                                        <rect x="2" y="10" width="14" height="6" rx="3" ry="3" class="text-black dark:text-white"/>
-                                        <rect x="10" y="3" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
-                                    </svg>
+                                    <!-- Top left bar -->
+                                    <rect x="2" y="10" width="14" height="6" rx="3" ry="3" class="text-black dark:text-white"/>
+                                    <rect x="10" y="3" width="6" height="6" rx="3" ry="3" class="text-teal-600"/>
+                                </svg>
                                 <!-- Site Name -->
                                 <h1 class="font-bold text-4xl text-center md:hidden">
                                     L<span class="text-teal-600">.</span>
@@ -542,249 +156,9 @@ function getGitInfo(string $path): array
             </aside>
 
             <!-- Main Content -->
-            <main class="flex-1 p-6 overflow-y-auto">
+            <main class="flex-1 ml-64 p-6 overflow-y-auto">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    <?php
-                        $entries = scandir($directory);
-
-                        foreach ($entries as $entry) {
-                            // Skip current, parent, and system volume information directories
-                            if ($entry === '.' || $entry === '..' || $entry === 'System Volume Information') {
-                                continue;
-                            }
-
-                            $path = $directory . $entry;
-                            // Only process directories for now
-                            if (!is_dir($path)) {
-                                continue; 
-                            }
-
-                            // Read README.md
-                            $readmePath = "{$path}/README.md";
-                            $lines = file_exists($readmePath)
-                                ? file($readmePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                                : [];
-
-                            $title = false;
-                            $description = false;
-
-                            if ($lines && count($lines) >= 2) {
-                                $title = ltrim($lines[0], "# ");
-                                $description = $lines[1];
-                            }
-
-                            // Git info
-                            $info = getGitInfo($path);
-
-                            // Preview image detection
-                            $extensions = ['jpg', 'jpeg', 'png', 'webp'];
-                            $preview = null;
-
-                            foreach ($extensions as $ext) {
-                                $candidate = "{$path}/preview.$ext";
-                                if (file_exists($candidate)) {
-                                    $preview = $candidate;
-                                    break;
-                                }
-                            }
-
-                            if ($preview) {
-                                // Show the actual preview image
-                                $previewOutput = '<img src="' . $preview . '" alt="' . $title . '" class="h-60 mx-auto pb-4 object-contain" />';
-                            } else {
-                                // Show ONLY the yellow banner, centered in the h-60 space
-                                $previewOutput = '
-                                    <div class="h-60 flex items-center justify-center px-4 pb-4">
-                                        <div class="rounded-md bg-yellow-50 border border-yellow-200 px-4 py-4 text-sm text-yellow-800 text-center flex flex-col items-center gap-3">
-
-                                            <!-- Small SVG icon -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" 
-                                                class="h-10 w-10 text-yellow-700 opacity-80" 
-                                                fill="currentColor" viewBox="0 0 32 32">
-                                                <defs><style>.cls-1{fill:none;}</style></defs>
-                                                <title>no-image</title>
-                                                <path d="M30,3.4141,28.5859,2,2,28.5859,3.4141,30l2-2H26a2.0027,2.0027,0,0,0,2-2V5.4141ZM26,26H7.4141l7.7929-7.793,2.3788,2.3787a2,2,0,0,0,2.8284,0L22,19l4,3.9973Zm0-5.8318-2.5858-2.5859a2,2,0,0,0-2.8284,0L19,19.1682l-2.377-2.3771L26,7.4141Z"/>
-                                                <path d="M6,22V19l5-4.9966,1.3733,1.3733,1.4159-1.416-1.375-1.375a2,2,0,0,0-2.8284,0L6,16.1716V6H22V4H6A2.002,2.002,0,0,0,4,6V22Z"/>
-                                                <rect class="cls-1" width="32" height="32"/>
-                                            </svg>
-
-                                            <!-- Banner text -->
-                                            <div>
-                                                <strong>This project has no preview.</strong><br>
-                                                Please update your project to include one.
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                ';
-                            }
-                        ?>
-
-                        <!-- CARD START -->
-                        <div x-data="{gitOpen: false, descOpen: false, actionsOpen: false, showReadMore: false, checkOverflow(el) { this.showReadMore = el.scrollHeight > el.clientHeight } }" class="flex flex-col border border-solid dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden relative">
-
-                            <!-- GIT BANNER -->
-                            <?php if ($info['isRepo']): ?>
-                                <div class="rounded-md bg-green-50 border border-green-200 m-4 px-4 py-3 text-sm text-green-800 flex items-center justify-between">
-                                    <div class="font-semibold text-green-700">Git Repository Detected</div>
-                                    <button @click="gitOpen = !gitOpen; descOpen = false" class="ml-4 px-3 py-1 text-xs font-medium rounded bg-green-100 text-green-700 border border-green-300 hover:bg-green-200 transition" x-text="gitOpen ? 'Close GIT Details' : 'View GIT Details'" ></button>
-                                </div>
-                            <?php else: ?>
-                                <div class="rounded-md bg-red-50 border border-red-200 m-4 px-4 py-3 text-sm text-red-800">
-                                    <span class="font-semibold text-red-700">Not a Git Repository.</span>
-                                    <span class="text-red-700">Please consider making one to enable version control.</span>
-                                </div>
-                            <?php endif; ?>
-
-                            <!-- SHARED OVERLAY (Git + Description + Actions) -->
-                            <div x-show="gitOpen || descOpen || actionsOpen" x-transition @click.outside="gitOpen = false; descOpen = false; actionsOpen = false" class="absolute left-4 right-4 top-[4.5rem] z-50 rounded-lg border border-gray-200 bg-white dark:bg-gray-800 shadow-xl" >
-                                <!-- GIT DETAILS -->
-                                <template x-if="gitOpen">
-                                    <div>
-                                        <div class="px-4 py-3 border-b border-gray-100">
-                                            <h3 class="text-sm font-semibold text-gray-700"><?= htmlspecialchars($title) ?> Repository Details</h3>
-                                        </div>
-
-                                        <div class="px-4 py-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
-                                            <div>
-                                                <div class="font-medium text-gray-900">Current Branch</div>
-                                                <div class="mt-1 text-gray-600"><?= htmlspecialchars($info['branch']) ?></div>
-                                            </div>
-
-                                            <div>
-                                                <div class="font-medium text-gray-900">Total Commits</div>
-                                                <div class="mt-1 text-gray-600"><?= htmlspecialchars($info['commitCount']) ?></div>
-                                            </div>
-
-                                            <div class="md:col-span-2">
-                                                <div class="font-medium text-gray-900">Last Commit</div>
-                                                <div class="mt-1 text-gray-600 space-y-1">
-                                                    <div><span class="font-semibold">Hash:</span> <?= htmlspecialchars($info['lastCommit']['hash']) ?></div>
-                                                    <div><span class="font-semibold">Message:</span> <?= htmlspecialchars($info['lastCommit']['message']) ?></div>
-                                                    <div><span class="font-semibold">Author:</span> <?= htmlspecialchars($info['lastCommit']['author']) ?></div>
-                                                    <div><span class="font-semibold">Date:</span> <?= htmlspecialchars($info['lastCommit']['date']) ?></div>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="font-medium text-gray-900">Sync Status</div>
-                                                <div class="mt-1 text-gray-600 flex items-center gap-2">
-                                                    <span class="px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200">
-                                                        ↑ <?= intval($info['ahead']) ?> ahead
-                                                    </span>
-                                                    <span class="px-2 py-1 rounded bg-yellow-50 text-yellow-700 border border-yellow-200">
-                                                        ↓ <?= intval($info['behind']) ?> behind
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div class="font-medium text-gray-900">Repository Created</div>
-                                                <div class="mt-1 text-gray-600"><?= htmlspecialchars($info['formattedDate']) ?></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                                <!-- FULL DESCRIPTION -->
-                                <template x-if="descOpen">
-                                    <div>
-                                        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-                                            <h3 class="text-sm font-semibold text-gray-700"><?= htmlspecialchars($title) ?> Description</h3>
-                                            <button @click="descOpen = false" class="text-gray-500 hover:text-gray-700">✕</button>
-                                        </div>
-
-                                        <div class="px-4 py-4 text-sm text-gray-700 dark:text-gray-200 max-h-64 overflow-y-auto">
-                                            <?= nl2br(htmlspecialchars($description)) ?>
-                                        </div>
-                                    </div>
-                                </template>
-                                <!-- Actions -->
-                                <template x-if="actionsOpen">
-                                    <div>
-                                        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-                                            <h3 class="text-sm font-semibold text-gray-700">Project Actions</h3>
-                                            <button @click="actionsOpen = false" class="text-gray-500 hover:text-gray-700">✕</button>
-                                        </div>
-
-                                        <div class="px-4 py-4 flex flex-col gap-3 text-sm text-gray-700 dark:text-gray-200">
-
-                                            <!-- Gitea -->
-                                            <a href="<?= $urlGiteaServer . $entry ?>" target="_blank"
-                                            class="flex items-center gap-2 px-3 py-2 rounded-md border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 
-                                                    hover:bg-teal-500 hover:text-white transition">
-                                                <span>Open in Gitea</span>
-                                            </a>
-
-                                            <!-- GitHub -->
-                                            <a href="<?= $urlGithub . $entry ?>" target="_blank"
-                                            class="flex items-center gap-2 px-3 py-2 rounded-md border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 
-                                                    hover:bg-teal-500 hover:text-white transition">
-                                                <span>Open in GitHub</span>
-                                            </a>
-
-                                            <!-- VS Code -->
-                                            <a href="vscode://file/W:/<?= urlencode($path) ?>"
-                                            class="flex items-center gap-2 px-3 py-2 rounded-md border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 
-                                                    hover:bg-teal-500 hover:text-white transition">
-                                                <span>Open in VS Code</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-
-                            <!-- TITLE -->
-                            <div class="px-4 pb-4 mt-auto">
-                                <?php if ($title): ?>
-                                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        <?= htmlspecialchars($title) ?>
-                                    </h2>
-                                <?php else: ?>
-                                    <div class="rounded-md bg-yellow-50 border border-yellow-200 px-4 py-3 text-sm text-yellow-800">
-                                        <strong>This project has no title.</strong> Please add a title to your README.md file.
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- PREVIEW IMAGE -->
-                            <?= $previewOutput ?>
-
-
-                            <!-- DESCRIPTION AREA -->
-                            <div class="px-4 pb-4 flex flex-col justify-between flex-1">
-
-                                <div class="relative mb-4" x-init="checkOverflow($refs.desc)">
-                                    <div x-ref="desc" class="relative h-16 overflow-hidden text-sm text-gray-500 sm:text-base dark:text-gray-300" >
-                                        <?php if ($description): ?>
-                                            <div class="pr-2">
-                                                <?= nl2br(htmlspecialchars($description)) ?>
-                                                <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-b from-transparent to-white dark:to-gray-800 pointer-events-none"></div>
-                                            </div>
-                                        <?php else: ?>
-                                            <div class="rounded-md bg-yellow-50 border border-yellow-200 px-4 py-3 text-sm text-yellow-800">
-                                                <strong>This project has no description.</strong> Please add one to your README.md file.
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-
-                                    <button x-show="showReadMore" @click="descOpen = !descOpen; gitOpen = false" class="absolute bottom-1 left-1/2 -translate-x-1/2 px-3 py-3 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold hover:bg-teal-500 dark:hover:bg-teal-500 hover:text-white rounded-md transition duration-150 ease-in-out" x-text="descOpen ? 'Close Description' : 'Read Description'"></button>
-                                </div>
-
-                                <!-- FULL-WIDTH ACTIONS BUTTON -->
-                                <div >
-                                    <button @click="actionsOpen = !actionsOpen; gitOpen = false; descOpen = false" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold hover:bg-teal-500 dark:hover:bg-teal-500 hover:text-white rounded-md transition duration-150 ease-in-out" x-text="actionsOpen ? 'Close Project Actions' : 'Project Actions'" ></button>
-                                </div>
-
-                                <div class="flex flex-wrap items-center">
-                                    <span class="text-xs pr-4">Built Using:</span>
-                                    <?= renderBadges(detectTechStack($path)) ?>
-                                </div>
-                            </div>
-                        </div>
-
-                    <?php
-                        } // end foreach
-                    ?>
+                    <?php echo renderAllProjectCards($directory) ?>
                 </div>
             </main>
         </div>
@@ -831,7 +205,7 @@ function getGitInfo(string $path): array
                             <div class="max-w-md pr-16 text-md text-gray-200">Enhance productivity and
                                 efficiency with cutting-edge artificial intelligence solutions for your business operations.
                             </div>
-                            <!-- LSocial Links -->
+                            <!-- Social Links -->
                             <div class="flex space-x-2">
                                 <a href="" target="_blank" class="text-gray-200 hover:text-gray-200">
                                     <span class="sr-only">Linkedin</span><svg fill="currentColor" viewBox="0 0 24 24"
