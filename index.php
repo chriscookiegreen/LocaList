@@ -47,7 +47,7 @@
         </script>
     </head>
 
-    <body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <body class="h-full min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="flex h">
             <!-- Sidebar -->
             <aside class="w-64 fixed top-0 left-0 overflow-y-auto bg-white dark:bg-gray-800 border-r dark:border-gray-700 py-6 px-4 space-y-4">
@@ -164,7 +164,7 @@
         </div>
 
         <!-- Footer  -->
-         <footer class="bg-zinc-700">
+         <footer class="mt-auto bg-zinc-700">
             <div class="container mx-auto p-0 md:p-8 xl:px-0">
                 <div class="mx-auto max-w-7xl px-6 pb-10 pt-16">
                     <div class="xl:grid xl:grid-cols-3 xl:gap-8">
