@@ -29,33 +29,34 @@ function runGit(string $path, string $command): string {
     return $output;
 }
 
-
 function getGitDetails(string $path): array {
     if (!isGitRepo($path)) {
-        return ['isRepo' => false];
+        return [
+            'isRepo' => false,
+            'state'  => 'no-repo'
+        ];
     }
 
     // Repo creation date (first commit)
     $createdDateRaw = runGit($path, "git log --pretty=%ad --date=short --reverse | head -1");
     $createdDate = date('d-m-Y', strtotime($createdDateRaw));
 
-
     // Branch
     $branch = runGit($path, "git rev-parse --abbrev-ref HEAD");
     if ($branch === '__GIT_ERROR__') {
-        return ['isRepo' => false];
+        return ['isRepo' => false, 'state' => 'no-repo'];
     }
 
-    // Status
+    // Status (uncommitted changes)
     $status = runGit($path, "git status --short");
     if ($status === '__GIT_ERROR__') {
-        return ['isRepo' => false];
+        return ['isRepo' => false, 'state' => 'no-repo'];
     }
 
     // Ahead/behind
     $aheadBehind = runGit($path, "git rev-list --left-right --count @{u}...HEAD");
     if ($aheadBehind === '__GIT_ERROR__') {
-        return ['isRepo' => false];
+        return ['isRepo' => false, 'state' => 'no-repo'];
     }
 
     [$behind, $ahead] = array_pad(explode("\t", $aheadBehind), 2, 0);
@@ -69,22 +70,40 @@ function getGitDetails(string $path): array {
     $lastDateRaw = runGit($path, "git log -1 --pretty=%ad --date=short");
     $lastDate = date('d-m-Y', strtotime($lastDateRaw));
 
-
     if ($lastMsg === '__GIT_ERROR__') {
-        return ['isRepo' => false];
+        return ['isRepo' => false, 'state' => 'no-repo'];
     }
 
+    // ---------------------------------------------------------
+    // GIT STATE CLASSIFICATION
+    // ---------------------------------------------------------
+
+    $state = 'clean'; // default
+
+    if (trim($status) !== '') {
+        $state = 'dirty';
+    } elseif ($ahead > 0 && $behind > 0) {
+        $state = 'diverged';
+    } elseif ($ahead > 0) {
+        $state = 'ahead';
+    } elseif ($behind > 0) {
+        $state = 'behind';
+    }
+
+    // ---------------------------------------------------------
+
     return [
-        'isRepo'   => true,
-        'createdDate' => $createdDate,
-        'branch'   => $branch,
-        'status'   => $status,
-        'ahead'    => (int) $ahead,
-        'behind'   => (int) $behind,
-        'totalCommits'=> (int) $totalCommits,
-        'lastMsg'  => $lastMsg,
-        'lastAuth' => $lastAuth,
-        'lastDate' => $lastDate,
-        'remote'   => runGit($path, "git remote get-url origin"),
+        'isRepo'       => true,
+        'state'        => $state,
+        'createdDate'  => $createdDate,
+        'branch'       => $branch,
+        'status'       => $status,
+        'ahead'        => (int) $ahead,
+        'behind'       => (int) $behind,
+        'totalCommits' => (int) $totalCommits,
+        'lastMsg'      => $lastMsg,
+        'lastAuth'     => $lastAuth,
+        'lastDate'     => $lastDate,
+        'remote'       => runGit($path, "git remote get-url origin"),
     ];
 }

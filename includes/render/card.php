@@ -14,6 +14,9 @@ $desc = $project['description'] ?? '';
 $shouldShowReadMore = strlen($desc) > 160;
 $remote = addslashes($project['git']['remote'] ?? '');
 
+$state = $project['git']['state'] ?? 'no-repo';
+$borderClass = gitStateBorderClass($state);
+
 return '
 <div x-data="{
     descOpen: false,
@@ -33,7 +36,7 @@ return '
 
 
 
-class="flex flex-col border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden relative">
+class="flex flex-col border ' . $borderClass . ' bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden relative">
 
             <div x-show="descOpen || actionsOpen || gitOpen"
                  @click.outside="descOpen = false; actionsOpen = false; gitOpen = false"
@@ -61,7 +64,9 @@ class="flex flex-col border dark:border-gray-700 bg-white dark:bg-gray-800 round
                     Project Actions
                 </button>
 
+                <div class="hidden">
                 ' . renderTechBadgesBlock($project) . '
+                </div>
             </div>
         </div>
     ';
