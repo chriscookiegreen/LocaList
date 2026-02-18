@@ -92,6 +92,8 @@ function getGitDetails(string $path): array {
 
     // ---------------------------------------------------------
 
+
+
     return [
         'isRepo'       => true,
         'state'        => $state,
