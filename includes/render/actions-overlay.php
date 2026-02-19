@@ -25,13 +25,6 @@ function renderActionsOverlay(array $project, string $urlGiteaServer, string $ur
                        class="flex items-center gap-2 px-3 py-2 rounded-md border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-teal-500 hover:text-white dark:hover:bg-teal-500 dark:hover:text-white transition">
                         <span>Open in VS Code</span>
                     </a>
-
-                    <button
-                        @click="copyRemote()"
-                        class="flex items-center gap-2 px-3 py-2 rounded-md border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-teal-500 hover:text-white dark:hover:bg-teal-500 dark:hover:text-white transition w-full text-left"
-                    >
-                        <span>Copy Git Remote URL</span>
-                    </button>
                 </div>
             </div>
             <div x-show="copiedRemote"

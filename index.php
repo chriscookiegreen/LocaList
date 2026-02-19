@@ -26,9 +26,9 @@
     // Configuration
     // ------------------------------------------------------------
     $directory      = '../';
-    $urlGiteaServer = '#';
-    $urlGithub      = '#';
-    $urlPHPMyadmin  = '#';
+    $urlGiteaServer = 'http://192.168.1.227:3000/chrisgreen/';
+    $urlGithub      = 'https://github.com/chriscookiegreen/';
+    $urlPHPMyadmin  = 'http://192.168.1.151/phpmyadmin/';
 
 ?>
 
